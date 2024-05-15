@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>최소규모 주차정보시스템(PIS)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .legend div {
+            margin: 0 15px;
+        }
+
+        .legend .green, .legend .red {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+        }
+
+        .legend .green {
+            background-color: green;
+        }
+
+        .legend .red {
+            background-color: red;
+        }
+
+        .parking-area {
+            margin: 0 auto;
+            padding-top: 1%;
+            text-align: center;
+        }
+
+        .parking-slot {
+            display: inline-block;
+            margin-right: 20px; /* Space between items */
+            margin-bottom: 20px; /* Space between rows */
+            width: 300px;
+            height: 450px;
+        }
+
+        .parking-slot:last-child {
+            margin-right: 0; /* Remove margin from the last item */
+        }
+
+        .parking-slot.occupied {
+            background-color: red;
+        }
+
+        .parking-slot.available {
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>최소규모 주차정보시스템(PIS)</h1>
+    </div>
+    <div class="legend">
+        <div id="available-count"><span class="green"></span> Available: 0</div>
+        <div id="occupied-count"><span class="red"></span> Occupied: 0</div>
+    </div>
+    <div class="parking-area" id="parking-area">
+        <div class="parking-slot" id="slot-1"></div><div class="parking-slot" id="slot-2"></div>
+    </div>
+
+    <script>
+        const parkingArea = document.querySelector('#parking-area');
+        const availableCount = document.querySelector('#available-count');
+        const occupiedCount = document.querySelector('#occupied-count');
+
+        let parkingData = [0, 0]; // 0 for available (green), 1 for occupied (red)
+
+        // Simulate data stream
+        setInterval(() => {
+            parkingData = parkingData.map(() => Math.round(Math.random())); // Randomly set 0 or 1
+            updateParkingSlots();
+        }, 2000);
+
+        function updateParkingSlots() {
+            let available = 0;
+            let occupied = 0;
+
+            parkingData.forEach((status, index) => {
+                const slot = document.querySelector(`#slot-${index + 1}`);
+                if (status === 0) {
+                    slot.classList.remove('occupied');
+                    slot.classList.add('available');
+                    available++;
+                } else {
+                    slot.classList.remove('available');
+                    slot.classList.add('occupied');
+                    occupied++;
+                }
+            });
+
+            availableCount.innerHTML = `<span class="green"></span> Available: ${available}`;
+            occupiedCount.innerHTML = `<span class="red"></span> Occupied: ${occupied}`;
+        }
+
+        // Initial render
+        updateParkingSlots();
+    </script>
+</body>
+</html>
